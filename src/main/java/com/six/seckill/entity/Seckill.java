@@ -1,12 +1,13 @@
 package com.six.seckill.entity;
 
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by liuze on 2016/10/19.
  */
-public class Seckill {
+public class Seckill implements Serializable{
 
     private Long seckillId;
     private String name;

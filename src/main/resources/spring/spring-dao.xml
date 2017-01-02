@@ -53,5 +53,12 @@
         <property name="basePackage" value="com.six.seckill.dao"/>
     </bean>
 
+    <!--RedisDao-->
+    <bean id="redisDao" class="com.six.seckill.dao.cache.RedisDao">
+
+        <constructor-arg index="0" value="localhost"/>
+        <constructor-arg index="1" value="6379"/>
+    </bean>
+
 
 </beans>

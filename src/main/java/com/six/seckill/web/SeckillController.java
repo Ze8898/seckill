@@ -56,7 +56,7 @@ public class SeckillController {
             ,method = RequestMethod.POST
             ,produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public SeckillResult<Exposer> exporser(Long seckillId){
+    public SeckillResult<Exposer> exporser(@PathVariable("seckillId") Long seckillId){
         SeckillResult<Exposer> result;
 
         try {
@@ -69,7 +69,7 @@ public class SeckillController {
 
         return result;
     }
-    @RequestMapping(value = "/{seckillId}/{mad5}/excutoin"
+    @RequestMapping(value = "/{seckillId}/{md5}/execution"
             ,method = RequestMethod.POST
             ,produces = "application/json;charset=UTF-8")
     @ResponseBody
@@ -81,19 +81,20 @@ public class SeckillController {
             return new SeckillResult<SeckillExecution>(false,"未注册");
         }
         try {
-            SeckillExecution execution =   seckillService.executeSeckill(seckillId,phone,md5);
+            //通过存储过程调用
+            SeckillExecution execution =   seckillService.executeSeckillProcedure(seckillId,phone,md5);
             return new SeckillResult<SeckillExecution>(true,execution);
         }catch (RepeatKillException e){
             SeckillExecution execution =new SeckillExecution(seckillId, SeckillStateEnum.REPEAT_KILL);
-            return new SeckillResult<SeckillExecution>(false,execution);
+            return new SeckillResult<SeckillExecution>(true,execution);
 
         }catch (SeckillException e){
             SeckillExecution execution =new SeckillExecution(seckillId, SeckillStateEnum.END);
-            return new SeckillResult<SeckillExecution>(false,execution);
+            return new SeckillResult<SeckillExecution>(true,execution);
         }catch(Exception e){
             logger.error(e.getMessage(),e);
             SeckillExecution execution =new SeckillExecution(seckillId, SeckillStateEnum.INNER_ERROR);
-            return new SeckillResult<SeckillExecution>(false,execution);
+            return new SeckillResult<SeckillExecution>(true,execution);
         }
     }
     @RequestMapping(value = "/time/now"
